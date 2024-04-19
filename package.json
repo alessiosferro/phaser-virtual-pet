@@ -1,0 +1,12 @@
+{
+  "name": "phaser-virtual-pet",
+  "version": "1.0.0",
+  "description": "Code for the [Phaser Virtual Pet](https://academy.zenva.com/course/build-a-virtual-pet-game-with-phaser-3/) course.",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
