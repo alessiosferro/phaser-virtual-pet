@@ -89,11 +89,11 @@ class GameScene extends Phaser.Scene {
         if (this.gameOver) return;
 
         this.playerStats = Object.entries(this.playerStats)
-            .filter(([key]) => stats.hasOwnProperty(key))
-            .reduce((acc, [key, value]) => ({
-                ...acc,
-                [key]: value + stats[key]
-            }), {});
+            .reduce((acc, [key, value]) =>
+                ({
+                    ...acc,
+                    [key]: stats.hasOwnProperty(key) ? value + stats[key] : value
+                }), {});
 
         this.refreshHud();
 
@@ -200,4 +200,4 @@ class GameScene extends Phaser.Scene {
     }
 }
 
-const gameScene = new GameScene();
+const GAME_SCENE = new GameScene();

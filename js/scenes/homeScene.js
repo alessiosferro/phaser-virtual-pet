@@ -35,4 +35,4 @@ class HomeScene extends Phaser.Scene {
     }
 }
 
-const homeScene = new HomeScene();
+const HOME_SCENE = new HomeScene();
