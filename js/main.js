@@ -10,6 +10,11 @@ class Game extends Phaser.Scene {
     }
 
     this.isUiBlocked = false;
+
+    this.hud = {
+      healthText: null,
+      funText: null
+    };
   }
 
   preload() {
@@ -84,7 +89,7 @@ class Game extends Phaser.Scene {
 
     this.anims.create({
       key: 'eat',
-      frameRate: 7,
+      frameRate: 10,
       frames: this.anims.generateFrameNames('pet', {
         frames: [1, 2, 3]
       }),
@@ -92,6 +97,24 @@ class Game extends Phaser.Scene {
       repeat: 0
     });
 
+    this.createHud();
+  }
+
+  createHud() {
+    this.hud.healthText = this.add.text(20, 20, "Health: 100", {
+      font: "24px Arial",
+      fill: "#ffffff"
+    });
+
+    this.hud.funText = this.add.text( 180, 20, "Fun: 100", {
+      font: "24px Arial",
+      fill: '#ffffff'
+    })
+  }
+
+  refreshHud() {
+    this.hud.healthText.setText(`Health: ${this.playerStats.health}`);
+    this.hud.funText.setText(`Fun: ${this.playerStats.fun}`);
   }
 
   resetUI() {
@@ -104,6 +127,8 @@ class Game extends Phaser.Scene {
     });
 
     this.selectedItem = null;
+
+    this.refreshHud();
   }
 
   selectButton() {
@@ -125,8 +150,8 @@ class Game extends Phaser.Scene {
 
     this.scene.tweens.add({
       targets: this.scene.pet,
-      duration: 1000,
-      angle: 720,
+      duration: 600,
+      angle: 360,
       onComplete: () => {
         this.scene.playerStats.fun += this.spriteStats.fun;
         this.scene.resetUI();
@@ -143,7 +168,7 @@ class Game extends Phaser.Scene {
     this.isUiBlocked = true;
 
     this.tweens.add({
-      duration: 800,
+      duration: 600,
       targets: this.pet,
       x: placeX,
       y: placeY - 15,
