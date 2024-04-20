@@ -15,6 +15,13 @@ class Game extends Phaser.Scene {
       healthText: null,
       funText: null
     };
+
+    this.decayRates = {
+      health: -5,
+      fun: -2
+    }
+
+    this.isGameOver = false;
   }
 
   preload() {
@@ -50,9 +57,7 @@ class Game extends Phaser.Scene {
     this.pet.on('animationcomplete', () => {
       this.pet.setFrame(0);
 
-      Object.keys(this.selectedItem.spriteStats).forEach(stat => {
-        this.playerStats[stat] += this.selectedItem.spriteStats[stat];
-      });
+      this.updateStats(this.selectedItem.spriteStats);
 
       this.placedItem.destroy();
 
@@ -86,6 +91,12 @@ class Game extends Phaser.Scene {
       this.rotate
     ];
 
+    this.time.addEvent({
+      repeat: -1,
+      delay: 1000,
+      callback: () => this.updateStats(this.decayRates)
+    })
+
 
     this.anims.create({
       key: 'eat',
@@ -98,6 +109,26 @@ class Game extends Phaser.Scene {
     });
 
     this.createHud();
+  }
+
+  updateStats(stats) {
+    Object.keys(this.playerStats)
+        .filter(key => stats.hasOwnProperty(key))
+        .forEach(key => {
+      this.playerStats[key] += stats[key];
+    });
+
+
+    if (this.playerStats.health <= 0) {
+      this.playerStats.health = 0;
+      this.isGameOver = true;
+    }
+
+    if (this.isGameOver) {
+      console.log('Game Over');
+    }
+
+    this.refreshHud();
   }
 
   createHud() {
@@ -153,9 +184,9 @@ class Game extends Phaser.Scene {
       duration: 600,
       angle: 360,
       onComplete: () => {
-        this.scene.playerStats.fun += this.spriteStats.fun;
+        this.scene.updateStats(this.spriteStats);
         this.scene.resetUI();
-      }
+      },
     })
   }
 
